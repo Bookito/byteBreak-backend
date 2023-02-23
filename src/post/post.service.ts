@@ -8,7 +8,7 @@ export class PostService {
 
   async getAllPosts(): Promise<any[]> {
     const params = {
-      TableName: 'YOUR_TABLE_NAME',
+      TableName: 'Posts',
     };
 
     const result = await this.dynamoDbClient.scan(params).promise();
@@ -18,7 +18,7 @@ export class PostService {
 
   async getPostById(id: string): Promise<any> {
     const params = {
-      TableName: 'YOUR_TABLE_NAME',
+      TableName: 'Posts',
       Key: { id },
     };
 
@@ -29,7 +29,7 @@ export class PostService {
 
   async createPost(data: any): Promise<void> {
     const params = {
-      TableName: 'YOUR_TABLE_NAME',
+      TableName: 'Posts',
       Item: {
         id: uuid(),
         title: data.title,
@@ -44,7 +44,7 @@ export class PostService {
 
   async updatePost(id: string, data: any): Promise<void> {
     const params = {
-      TableName: 'YOUR_TABLE_NAME',
+      TableName: 'Posts',
       Key: { id },
       UpdateExpression:
         'set title = :t, publishedDate = :p, postOwner = :o, link = :l',
@@ -62,7 +62,7 @@ export class PostService {
 
   async deletePost(id: string): Promise<void> {
     const params = {
-      TableName: 'YOUR_TABLE_NAME',
+      TableName: 'Posts',
       Key: { id },
     };
 
