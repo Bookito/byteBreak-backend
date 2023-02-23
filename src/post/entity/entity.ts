@@ -1,4 +1,4 @@
-export class Blog {
+export class Post {
   id: string;
   title: string;
   publishedDate: string;
