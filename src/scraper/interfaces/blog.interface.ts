@@ -1,4 +1,4 @@
-import { BlogType } from 'enums/blog-type.enum';
+import { BlogType } from 'src/scraper/enums/blog-type.enum';
 
 export interface Blog {
   title: string;

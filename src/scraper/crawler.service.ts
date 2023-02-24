@@ -3,8 +3,8 @@ import { PostsService } from '../posts/posts.service';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { CreatePostDto } from '../posts/dto/create-post.dto';
-import { Blog } from '../../interfaces/blog.interface';
-import { BlogType } from '../../enums/blog-type.enum';
+import { Blog } from './interfaces/blog.interface';
+import { BlogType } from './enums/blog-type.enum';
 
 @Injectable()
 export class CrawlerService {

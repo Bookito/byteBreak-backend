@@ -1,86 +1,76 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { DynamoDB } from 'aws-sdk';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { DynamoDBService } from 'src/dynamo-db/dynamo-db.service';
+import { Post } from './interfaces/post.interface';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
-export class PostsService {
-  private readonly TABLE_NAME = process.env.DYNAMODB_TABLE;
+export class PostService {
+  constructor(
+    private readonly dynamoDBService: DynamoDBService,
+    @Inject('Posts') private readonly postsTableName: string,
+  ) {}
 
-  constructor(private readonly dynamoDB: DynamoDB) {}
-
-  async getAllPosts(): Promise<any[]> {
+  async getAllPosts(): Promise<Post[]> {
     const params = {
-      TableName: this.TABLE_NAME,
+      TableName: this.postsTableName,
     };
-
-    const result = await this.dynamoDB.scan(params).promise();
-
-    return result.Items;
+    const result = await this.dynamoDBService.scan(params).promise();
+    return result.Items as Post[];
   }
 
-  async getPostById(id: string): Promise<any> {
+  async getPostById(id: string): Promise<Post> {
     const params = {
-      TableName: this.TABLE_NAME,
+      TableName: this.postsTableName,
       Key: {
-        id: { S: id },
+        postId: id,
       },
     };
-
-    const result = await this.dynamoDB.getItem(params).promise();
-
-    return result.Item;
+    const result = await this.dynamoDBService.get(params).promise();
+    return result.Item as Post;
   }
 
   async createPost(data: CreatePostDto): Promise<void> {
-    const params = {
-      TableName: this.TABLE_NAME,
-      Item: {
-        id: { S: uuid() },
-        title: { S: data.title },
-        publishedDate: { S: data.publishedDate },
-        postOwner: { S: data.postOwner },
-        link: { S: data.link },
-      },
+    const newPost: Post = {
+      id: uuid(),
+      title: data.title,
+      link: data.link,
+      publishedDate: data.publishedDate,
+      postOwner: data.postOwner,
     };
-
-    await this.dynamoDB.putItem(params).promise();
+    const params = {
+      TableName: this.postsTableName,
+      Item: newPost,
+    };
+    await this.dynamoDBService.put(params).promise();
   }
 
   async updatePost(id: string, data: UpdatePostDto): Promise<void> {
     const params = {
-      TableName: this.TABLE_NAME,
+      TableName: this.postsTableName,
       Key: {
-        id: { S: id },
+        postId: id,
       },
       UpdateExpression:
-        'set #title = :title, #publishedDate = :publishedDate, #postOwner = :postOwner, #link = :link',
-      ExpressionAttributeNames: {
-        '#title': 'title',
-        '#publishedDate': 'publishedDate',
-        '#postOwner': 'postOwner',
-        '#link': 'link',
-      },
+        'set title = :title, link = :link, publishedDate = :publishedDate, postOwner = :postOwner',
       ExpressionAttributeValues: {
-        ':title': { S: data.title },
-        ':publishedDate': { S: data.publishedDate },
-        ':postOwner': { S: data.postOwner },
-        ':link': { S: data.link },
+        ':title': data.title,
+        ':link': data.link,
+        ':publishedDate': data.publishedDate,
+        ':postOwner': data.postOwner,
       },
     };
-
-    await this.dynamoDB.updateItem(params).promise();
+    await this.dynamoDBService.update(params).promise();
   }
 
   async deletePost(id: string): Promise<void> {
     const params = {
-      TableName: this.TABLE_NAME,
+      TableName: this.postsTableName,
       Key: {
-        id: { S: id },
+        postId: id,
       },
     };
-
-    await this.dynamoDB.deleteItem(params).promise();
+    await this.dynamoDBService.delete(params).promise();
   }
 }
