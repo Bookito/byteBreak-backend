@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { BlogType } from './enums/blog-type.enum';
 import { Blog } from './interfaces/blog.interface';
 import * as Parser from 'rss-parser';
 

@@ -8,10 +8,10 @@ export class DynamoDBService {
   constructor() {
     this.dynamoDB = new AWS.DynamoDB({
       apiVersion: '2012-08-10',
-      region: 'ap-northeast-2', // Replace with your desired region
+      region: process.env.AWS_REGION, // Replace with your desired region
       credentials: new AWS.Credentials({
-        accessKeyId: 'AKIAYOMCEXD33V6YOEEH', // Replace with your IAM user access key ID
-        secretAccessKey: 'mNWds2cnA0rxXrA47g3hZskSyVjr/i/6BF3QJrCn', // Replace with your IAM user secret access key
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Replace with your IAM user access key ID
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Replace with your IAM user secret access key
       }),
     });
   }
