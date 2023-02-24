@@ -1,27 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDB } from 'aws-sdk';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { AWS_REGION } from '../app/app.constants';
 
 @Injectable()
 export class DynamoDBService {
-  private readonly client: DynamoDB.DocumentClient;
+  private readonly documentClient: DocumentClient;
 
   constructor() {
-    this.client = new DynamoDB.DocumentClient();
+    this.documentClient = new DocumentClient({ region: AWS_REGION });
   }
 
-  async put(params: DynamoDB.DocumentClient.PutItemInput) {
-    return this.client.put(params).promise();
+  async put(
+    params: DocumentClient.PutItemInput,
+  ): Promise<DocumentClient.PutItemOutput> {
+    return this.documentClient.put(params).promise();
   }
 
-  async scan(params: DynamoDB.DocumentClient.ScanInput) {
-    return this.client.scan(params).promise();
+  async get(
+    params: DocumentClient.GetItemInput,
+  ): Promise<DocumentClient.GetItemOutput> {
+    return this.documentClient.get(params).promise();
   }
 
-  async get(params: DynamoDB.DocumentClient.GetItemInput) {
-    return this.client.get(params).promise();
+  async delete(
+    params: DocumentClient.DeleteItemInput,
+  ): Promise<DocumentClient.DeleteItemOutput> {
+    return this.documentClient.delete(params).promise();
   }
 
-  async delete(params: DynamoDB.DocumentClient.DeleteItemInput) {
-    return this.client.delete(params).promise();
+  async scan(
+    params: DocumentClient.ScanInput,
+  ): Promise<DocumentClient.ScanOutput> {
+    return this.documentClient.scan(params).promise();
   }
 }
