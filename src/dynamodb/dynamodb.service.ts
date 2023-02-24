@@ -7,7 +7,7 @@ export class DynamoDBService {
 
   constructor() {
     this.dynamoDB = new AWS.DynamoDB({
-      apiVersion: '2022-02-24',
+      apiVersion: '2012-08-10',
       region: 'ap-northeast-2', // Replace with your desired region
       credentials: new AWS.Credentials({
         accessKeyId: 'AKIAYOMCEXD33V6YOEEH', // Replace with your IAM user access key ID
