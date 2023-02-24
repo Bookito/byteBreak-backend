@@ -1,5 +1,4 @@
-export class Post {
-  id: string;
+export class CreatePostDto {
   title: string;
   publishedDate: string;
   postOwner: string;
