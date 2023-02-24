@@ -1,6 +1,5 @@
 export class CreatePostDto {
-  title: string;
-  publishedDate: string;
-  postOwner: string;
-  link: string;
+  readonly title: string;
+  readonly link: string;
+  readonly publishedDate: string;
 }
