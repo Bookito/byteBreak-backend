@@ -1,13 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { CrawlerService } from './crawler.service';
 
-@Controller('crawl')
+@Controller('crawler')
 export class CrawlerController {
   constructor(private readonly crawlerService: CrawlerService) {}
 
-  @Get()
-  async crawl(): Promise<string> {
-    await this.crawlerService.crawlPosts();
-    return 'Crawling completed!';
+  @Get('blogs')
+  async getBlogs() {
+    return await this.crawlerService.getBlogs();
   }
 }

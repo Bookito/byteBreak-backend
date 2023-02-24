@@ -1,81 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import { PostsService } from '../posts/posts.service';
-import axios from 'axios';
-import * as cheerio from 'cheerio';
-import { CreatePostDto } from '../posts/dto/create-post.dto';
-import { Blog } from './interfaces/blog.interface';
+import { Injectable, Logger } from '@nestjs/common';
+import * as Parser from 'rss-parser';
 import { BlogType } from './enums/blog-type.enum';
+import { Blog } from './interfaces/blog.interface';
 
 @Injectable()
 export class CrawlerService {
-  constructor(private readonly postService: PostsService) {}
+  private readonly logger = new Logger(CrawlerService.name);
 
-  async crawl() {
-    const blogs: Blog[] = [
-      { title: BlogType.TECH_CRUNCH, url: 'https://techcrunch.com/' },
-      { title: BlogType.THE_VERGE, url: 'https://www.theverge.com/' },
-      { title: BlogType.RECODE, url: 'https://www.recode.net/' },
+  async crawlBlogs(): Promise<Blog[]> {
+    const feedUrls = [
+      {
+        type: BlogType.GOOGLE,
+        url: 'https://developers.googleblog.com/feeds/posts/default?alt=rss',
+      },
+      { type: BlogType.AMAZON, url: 'https://aws.amazon.com/blogs/aws/feed/' },
+      {
+        type: BlogType.MICROSOFT,
+        url: 'https://devblogs.microsoft.com/aspnet/feed/',
+      },
+      { type: BlogType.FACEBOOK, url: 'https://engineering.fb.com/feed/' },
+      {
+        type: BlogType.INSTAGRAM,
+        url: 'https://instagram-engineering.com/feed',
+      },
+      {
+        type: BlogType.LINKEDIN,
+        url: 'https://engineering.linkedin.com/blog.rss.xml',
+      },
+      { type: BlogType.NETFLIX, url: 'https://netflixtechblog.com/feed' },
+      {
+        type: BlogType.TWITTER,
+        url: 'https://blog.twitter.com/engineering/en_us/topics/insights.rss',
+      },
+      {
+        type: BlogType.AIRBNB,
+        url: 'https://medium.com/airbnb-engineering/feed',
+      },
+      { type: BlogType.UBER, url: 'https://eng.uber.com/feed' },
+      { type: BlogType.SLACK, url: 'https://slack.engineering/feed' },
+      { type: BlogType.DROPBOX, url: 'https://dropbox.tech/feed' },
+      { type: BlogType.TWITCH, url: 'https://blog.twitch.tv/feed' },
+      {
+        type: BlogType.PINTEREST,
+        url: 'https://medium.com/feed/pinterest-engineering',
+      },
+      {
+        type: BlogType.EVERNOTE,
+        url: 'https://evernote.com/blog/category/engineering/feed',
+      },
     ];
 
-    for (const blog of blogs) {
-      const response = await axios.get(blog.url);
-      const html = response.data;
-      const $ = cheerio.load(html);
+    const blogs: Blog[] = [];
+    const parser = new Parser();
 
-      switch (blog.type) {
-        case BlogType.TECH_CRUNCH:
-          $('.post-block__title').each((i, element) => {
-            const title = $(element).text();
-            const link = $(element).children().attr('href');
-            const publishedDate = $(element)
-              .siblings('.river-byline__time')
-              .text();
-            const data: CreatePostDto = {
-              title,
-              publishedDate,
-              link,
-              postOwner: 'admin',
-            };
-            this.postService.createPost(data);
-          });
-          break;
-        case BlogType.THE_VERGE:
-          $('.c-entry-box--compact__title').each((i, element) => {
-            const title = $(element).text();
-            const link = $(element).children().attr('href');
-            const publishedDate = $(element)
-              .siblings('.c-byline')
-              .find('time')
-              .attr('datetime');
-            const data: CreatePostDto = {
-              title,
-              publishedDate,
-              link,
-              postOwner: 'admin',
-            };
-            this.postService.createPost(data);
-          });
-          break;
-        case BlogType.RECODE:
-          $('.c-entry-box--compact__title').each((i, element) => {
-            const title = $(element).text();
-            const link = $(element).children().attr('href');
-            const publishedDate = $(element)
-              .siblings('.c-byline')
-              .find('time')
-              .attr('datetime');
-            const data: CreatePostDto = {
-              title,
-              publishedDate,
-              link,
-              postOwner: 'admin',
-            };
-            this.postService.createPost(data);
-          });
-          break;
-        default:
-          break;
-      }
-    }
+    await Promise.all(
+      feedUrls.map(async (feedUrl) => {
+        const feed = await parser.parseURL(feedUrl.url);
+        feed.items.forEach((item) => {
+          const blog: Blog = {
+            title: item.title,
+            link: item.link,
+            publishedDate: item.pubDate,
+            blogType: feedUrl.type,
+          };
+          blogs.push(blog);
+        });
+        this.logger.debug(
+          `Fetched ${feed.items.length} blogs for ${feedUrl.type}`,
+        );
+      }),
+    );
+
+    return blogs;
   }
 }

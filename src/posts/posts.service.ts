@@ -1,76 +1,103 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
-import { DynamoDBService } from 'src/dynamo-db/dynamo-db.service';
+import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+
 import { Post } from './interfaces/post.interface';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
-export class PostService {
-  constructor(
-    private readonly dynamoDBService: DynamoDBService,
-    @Inject('Posts') private readonly postsTableName: string,
-  ) {}
+export class PostsService {
+  private readonly dynamoDB: DocumentClient;
 
-  async getAllPosts(): Promise<Post[]> {
-    const params = {
-      TableName: this.postsTableName,
+  constructor() {
+    this.dynamoDB = new DocumentClient();
+  }
+
+  async create(postOwner: string, createPostDto: CreatePostDto): Promise<Post> {
+    const post: Post = {
+      id: uuidv4(),
+      postOwner,
+      ...createPostDto,
     };
-    const result = await this.dynamoDBService.scan(params).promise();
+
+    const params = {
+      TableName: 'Posts',
+      Item: post,
+    };
+
+    await this.dynamoDB.put(params).promise();
+
+    return post;
+  }
+
+  async findAll(postOwner: string): Promise<Post[]> {
+    const params = {
+      TableName: 'Posts',
+      KeyConditionExpression: 'postOwner = :postOwner',
+      ExpressionAttributeValues: {
+        ':postOwner': postOwner,
+      },
+    };
+
+    const result = await this.dynamoDB.query(params).promise();
+
     return result.Items as Post[];
   }
 
-  async getPostById(id: string): Promise<Post> {
+  async findOne(postOwner: string, postId: string): Promise<Post> {
     const params = {
-      TableName: this.postsTableName,
+      TableName: 'Posts',
       Key: {
-        postId: id,
+        postOwner,
+        postId,
       },
     };
-    const result = await this.dynamoDBService.get(params).promise();
+
+    const result = await this.dynamoDB.get(params).promise();
+
     return result.Item as Post;
   }
 
-  async createPost(data: CreatePostDto): Promise<void> {
-    const newPost: Post = {
-      id: uuid(),
-      title: data.title,
-      link: data.link,
-      publishedDate: data.publishedDate,
-      postOwner: data.postOwner,
-    };
+  async update(
+    postOwner: string,
+    postId: string,
+    updatePostDto: UpdatePostDto,
+  ): Promise<Post> {
     const params = {
-      TableName: this.postsTableName,
-      Item: newPost,
-    };
-    await this.dynamoDBService.put(params).promise();
-  }
-
-  async updatePost(id: string, data: UpdatePostDto): Promise<void> {
-    const params = {
-      TableName: this.postsTableName,
+      TableName: 'Posts',
       Key: {
-        postId: id,
+        postOwner,
+        postId,
       },
       UpdateExpression:
-        'set title = :title, link = :link, publishedDate = :publishedDate, postOwner = :postOwner',
+        'set title = :title, publishedDate = :publishedDate, link = :link',
       ExpressionAttributeValues: {
-        ':title': data.title,
-        ':link': data.link,
-        ':publishedDate': data.publishedDate,
-        ':postOwner': data.postOwner,
+        ':title': updatePostDto.title,
+        ':publishedDate': updatePostDto.publishedDate,
+        ':link': updatePostDto.link,
       },
+      ReturnValues: 'ALL_NEW',
     };
-    await this.dynamoDBService.update(params).promise();
+
+    const result = await this.dynamoDB.update(params).promise();
+
+    return result.Attributes as Post;
   }
 
-  async deletePost(id: string): Promise<void> {
+  async remove(postOwner: string, postId: string): Promise<Post> {
+    const post = await this.findOne(postOwner, postId);
+
     const params = {
-      TableName: this.postsTableName,
+      TableName: 'Posts',
       Key: {
-        postId: id,
+        postOwner,
+        postId,
       },
     };
-    await this.dynamoDBService.delete(params).promise();
+
+    await this.dynamoDB.delete(params).promise();
+
+    return post;
   }
 }
