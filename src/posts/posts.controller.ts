@@ -1,46 +1,55 @@
 import {
   Controller,
   Get,
-  Post as PostMethod,
+  Post,
   Body,
   Put,
   Param,
   Delete,
 } from '@nestjs/common';
+import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from './interfaces/post.interface';
-import { PostsService } from './posts.service';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @PostMethod()
-  create(@Body() createPostDto: CreatePostDto): Promise<Post> {
-    return this.postsService.create(createPostDto);
+  @Post(':postOwner')
+  create(
+    @Param('postOwner') postOwner: string,
+    @Body() createPostDto: CreatePostDto,
+  ) {
+    return this.postsService.create(postOwner, createPostDto);
   }
 
-  @Get()
-  findAll(): Promise<Post[]> {
-    return this.postsService.findAll();
+  @Get(':postOwner')
+  findAll(@Param('postOwner') postOwner: string) {
+    return this.postsService.findAll(postOwner);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<Post> {
-    return this.postsService.findOne(id);
+  @Get(':postOwner/:postId')
+  findOne(
+    @Param('postOwner') postOwner: string,
+    @Param('postId') postId: string,
+  ) {
+    return this.postsService.findOne(postOwner, postId);
   }
 
-  @Put(':id')
+  @Put(':postOwner/:postId')
   update(
-    @Param('id') id: string,
+    @Param('postOwner') postOwner: string,
+    @Param('postId') postId: string,
     @Body() updatePostDto: UpdatePostDto,
-  ): Promise<Post> {
-    return this.postsService.update(id, updatePostDto);
+  ) {
+    return this.postsService.update(postOwner, postId, updatePostDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.postsService.remove(id);
+  @Delete(':postOwner/:postId')
+  remove(
+    @Param('postOwner') postOwner: string,
+    @Param('postId') postId: string,
+  ) {
+    return this.postsService.remove(postOwner, postId);
   }
 }

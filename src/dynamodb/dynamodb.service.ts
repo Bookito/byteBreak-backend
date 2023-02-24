@@ -1,27 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDB } from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class DynamoDBService {
-  private readonly client: DynamoDB.DocumentClient;
+  private readonly dynamoDB;
 
   constructor() {
-    this.client = new DynamoDB.DocumentClient();
+    this.dynamoDB = new AWS.DynamoDB({
+      apiVersion: '2012-08-10',
+      region: 'ap-northeast-2', // Replace with your desired region
+      credentials: new AWS.Credentials({
+        accessKeyId: 'AKIAYOMCEXD33V6YOEEH', // Replace with your IAM user access key ID
+        secretAccessKey: 'mNWds2cnA0rxXrA47g3hZskSyVjr/i/6BF3QJrCn', // Replace with your IAM user secret access key
+      }),
+    });
   }
 
-  async put(params: DynamoDB.DocumentClient.PutItemInput) {
-    return this.client.put(params).promise();
+  async putItem(params: AWS.DynamoDB.PutItemInput): Promise<void> {
+    await this.dynamoDB.putItem(params).promise();
   }
 
-  async scan(params: DynamoDB.DocumentClient.ScanInput) {
-    return this.client.scan(params).promise();
+  async scan(params: AWS.DynamoDB.ScanInput): Promise<AWS.DynamoDB.ScanOutput> {
+    return await this.dynamoDB.scan(params).promise();
   }
 
-  async get(params: DynamoDB.DocumentClient.GetItemInput) {
-    return this.client.get(params).promise();
+  async getItem(
+    params: AWS.DynamoDB.GetItemInput,
+  ): Promise<AWS.DynamoDB.GetItemOutput> {
+    return await this.dynamoDB.getItem(params).promise();
   }
 
-  async delete(params: DynamoDB.DocumentClient.DeleteItemInput) {
-    return this.client.delete(params).promise();
+  async deleteItem(params: AWS.DynamoDB.DeleteItemInput): Promise<void> {
+    await this.dynamoDB.deleteItem(params).promise();
   }
 }
