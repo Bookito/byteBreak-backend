@@ -1,36 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { AWS_REGION } from '../app/app.constants';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class DynamoDBService {
-  private readonly documentClient: DocumentClient;
+  private readonly dynamoDB;
 
   constructor() {
-    this.documentClient = new DocumentClient({ region: AWS_REGION });
+    this.dynamoDB = new AWS.DynamoDB({
+      apiVersion: '2022-02-24',
+      region: 'ap-northeast-2', // Replace with your desired region
+      credentials: new AWS.Credentials({
+        accessKeyId: 'AKIAYOMCEXD33V6YOEEH', // Replace with your IAM user access key ID
+        secretAccessKey: 'mNWds2cnA0rxXrA47g3hZskSyVjr/i/6BF3QJrCn', // Replace with your IAM user secret access key
+      }),
+    });
   }
 
-  async put(
-    params: DocumentClient.PutItemInput,
-  ): Promise<DocumentClient.PutItemOutput> {
-    return this.documentClient.put(params).promise();
+  async putItem(params: AWS.DynamoDB.PutItemInput): Promise<void> {
+    await this.dynamoDB.putItem(params).promise();
   }
 
-  async get(
-    params: DocumentClient.GetItemInput,
-  ): Promise<DocumentClient.GetItemOutput> {
-    return this.documentClient.get(params).promise();
+  async scan(params: AWS.DynamoDB.ScanInput): Promise<AWS.DynamoDB.ScanOutput> {
+    return await this.dynamoDB.scan(params).promise();
   }
 
-  async delete(
-    params: DocumentClient.DeleteItemInput,
-  ): Promise<DocumentClient.DeleteItemOutput> {
-    return this.documentClient.delete(params).promise();
+  async getItem(
+    params: AWS.DynamoDB.GetItemInput,
+  ): Promise<AWS.DynamoDB.GetItemOutput> {
+    return await this.dynamoDB.getItem(params).promise();
   }
 
-  async scan(
-    params: DocumentClient.ScanInput,
-  ): Promise<DocumentClient.ScanOutput> {
-    return this.documentClient.scan(params).promise();
+  async deleteItem(params: AWS.DynamoDB.DeleteItemInput): Promise<void> {
+    await this.dynamoDB.deleteItem(params).promise();
   }
 }
