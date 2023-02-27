@@ -93,8 +93,8 @@ export class DynamoDBService {
   }
 
   async create(post: Post): Promise<Post> {
-    const id = uuidv4(); // generate a new unique ID
-    const item = { ...post, id }; // add the id to the item
+    const id = uuidv4();
+    const item = { ...post, id };
 
     const params = {
       TableName: process.env.TABLE_NAME,
