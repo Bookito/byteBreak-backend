@@ -15,6 +15,11 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get()
+  async getAllPosts() {
+    return this.postsService.getAllPosts();
+  }
+
   @Post(':postOwner')
   create(
     @Param('postOwner') postOwner: string,

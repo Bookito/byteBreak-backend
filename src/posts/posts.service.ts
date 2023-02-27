@@ -14,6 +14,16 @@ export class PostsService {
     this.dynamoDB = new DocumentClient();
   }
 
+  async getAllPosts(): Promise<Post[]> {
+    const params = {
+      TableName: 'Posts',
+    };
+
+    const result = await this.dynamoDB.scan(params).promise();
+
+    return result.Items as Post[];
+  }
+
   async create(postOwner: string, createPostDto: CreatePostDto): Promise<Post> {
     const post: Post = {
       id: uuidv4(),

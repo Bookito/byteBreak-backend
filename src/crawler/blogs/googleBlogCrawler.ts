@@ -10,6 +10,7 @@ export class GoogleBlogCrawler {
   ) {}
 
   async crawl() {
+    console.log(this.dynamoDBService); // Add this line
     const blogUrl = 'https://developers.googleblog.com/';
     const response = await axios.get(blogUrl);
     const $ = cheerio.load(response.data);
@@ -22,23 +23,31 @@ export class GoogleBlogCrawler {
 
       const params = {
         TableName: 'Posts',
-        Key: { link: { S: postLink } },
+        Key: {
+          link: {
+            S: postLink,
+          },
+        },
       };
 
-      const existingItem = await this.dynamoDBService.getItem(params);
+      try {
+        const existingItem = await this.dynamoDBService.getItem(params);
 
-      if (!existingItem.Item) {
-        const params = {
-          TableName: 'Posts',
-          Item: {
-            title: { S: postTitle },
-            link: { S: postLink },
-            publishedDate: { S: postDate },
-            postOwner: { S: postOwner },
-          },
-        };
+        if (!existingItem.Item) {
+          const params = {
+            TableName: 'Posts',
+            Item: {
+              title: { S: postTitle },
+              link: { S: postLink },
+              publishedDate: { S: postDate },
+              postOwner: { S: postOwner },
+            },
+          };
 
-        await this.dynamoDBService.putItem(params);
+          await this.dynamoDBService.putItem(params);
+        }
+      } catch (err) {
+        console.error(`Google Blog Crawler Error: ${err.message}`);
       }
     }
   }
