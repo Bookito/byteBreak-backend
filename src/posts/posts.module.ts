@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
-import { DynamoDBService } from '../dynamodb';
-import { ConfigModule } from '@nestjs/config';
+import { DynamoDBModule } from '../dynamodb/dynamodb.module';
 
 @Module({
-  imports: [ConfigModule], // Import the ConfigModule here
+  imports: [DynamoDBModule],
   controllers: [PostsController],
-  providers: [PostsService, DynamoDBService],
+  providers: [PostsService],
 })
 export class PostsModule {}
