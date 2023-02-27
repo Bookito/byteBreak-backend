@@ -3,10 +3,11 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import { Post } from '../posts/interfaces/post.interface';
 import { DynamoDBService } from '../dynamodb/dynamodb.service';
+import { AWS_BLOG } from '../constants/blogSources';
 
 @Injectable()
 export class AwsBlogCrawler {
-  private readonly baseUrl = 'https://aws.amazon.com/blogs/aws/';
+  private readonly baseUrl = AWS_BLOG;
 
   private readonly logger = new Logger(AwsBlogCrawler.name);
 
