@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { GoogleBlogCrawler } from '../crawler/blogs/googleBlogCrawler';
+import { GoogleBlogCrawler } from 'src/crawlers/googleBlogCrawler';
 
 @Injectable()
 export class CronService {

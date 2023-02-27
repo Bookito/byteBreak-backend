@@ -1,7 +1,7 @@
 export interface Post {
-  id: string;
   title: string;
   link: string;
+  blogName: string;
   publishedDate: string;
   postOwner: string;
 }
