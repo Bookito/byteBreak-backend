@@ -1,0 +1,15 @@
+export const GOOGLE_BLOG = 'https://developers.googleblog.com/';
+export const AWS_BLOG = 'https://aws.amazon.com/blogs/aws/';
+export const MICROSOFT_BLOG = 'https://devblogs.microsoft.com/';
+export const FACEBOOK_BLOG = 'https://engineering.fb.com/';
+export const INSTAGRAM_BLOG = 'https://instagram-engineering.com/';
+export const LINKEDIN_BLOG = 'https://engineering.linkedin.com/blog';
+export const NETFLIX_BLOG = 'https://netflixtechblog.com/';
+export const TWITTER_BLOG = 'https://blog.twitter.com/engineering';
+export const AIRBNB_BLOG = 'https://medium.com/airbnb-engineering';
+export const UBER_BLOG = 'https://eng.uber.com/';
+export const SLACK_BLOG = 'https://slack.engineering/';
+export const DROPBOX_BLOG = 'https://dropbox.tech/';
+export const TWITCH_BLOG = 'https://blog.twitch.tv/en/';
+export const PINTEREST_BLOG = 'https://medium.com/@Pinterest_Engineering';
+export const EVERNOTE_BLOG = 'https://evernote.com/blog/category/engineering/';

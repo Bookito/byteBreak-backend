@@ -8,7 +8,6 @@ export class CronService {
 
   @Cron('30 6 * * *') // Runs every hour on the hour
   async handleCron() {
-    console.log('Cron job is running');
     try {
       await this.googleBlogCrawler.crawl();
       Logger.log('Cron Job: Crawled Google Blog', 'CronService');

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
-  DynamoDBClient,
   CreateTableCommand,
+  DynamoDBClient,
   PutItemCommand,
   ScanCommand,
   ScanCommandOutput,
@@ -24,7 +24,7 @@ export class DynamoDBService {
     });
 
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
       KeySchema: [
         { AttributeName: 'title', KeyType: 'HASH' },
         { AttributeName: 'link', KeyType: 'RANGE' },
@@ -71,7 +71,7 @@ export class DynamoDBService {
 
     const command = new CreateTableCommand(params);
     this.client
-      .send(new ScanCommand({ TableName: 'Posts' }))
+      .send(new ScanCommand({ TableName: process.env.TABLE_NAME }))
       .then(() => console.log('Table exists'))
       .catch(() => {
         this.client
@@ -83,7 +83,7 @@ export class DynamoDBService {
 
   async getAllPosts(): Promise<Post[]> {
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
     };
 
     const command = new ScanCommand(params);
@@ -97,7 +97,7 @@ export class DynamoDBService {
     const item = { ...post, id }; // add the id to the item
 
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
       Item: marshall(item),
     };
 
@@ -109,8 +109,7 @@ export class DynamoDBService {
 
   async scanItems(tableName: string): Promise<ScanCommandOutput> {
     const command = new ScanCommand({ TableName: tableName });
-    const results = await this.client.send(command);
-    return results;
+    return await this.client.send(command);
   }
 
   async putItem(tableName: string, item: Post): Promise<void> {

@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import cheerio from 'cheerio';
-
 import { Post } from '../posts/interfaces/post.interface';
 import { DynamoDBService } from '../dynamodb/dynamodb.service';
+import { GOOGLE_BLOG } from 'src/constants/blogSources';
 
 @Injectable()
 export class GoogleBlogCrawler {
-  private readonly baseUrl = 'https://developers.googleblog.com/';
+  private readonly baseUrl = GOOGLE_BLOG;
   private readonly blogPath = '/';
 
   private readonly logger = new Logger(GoogleBlogCrawler.name);
