@@ -10,6 +10,7 @@ import { MicrosoftBlogCrawler } from '../crawlers/microsoftBlogCrawler';
 import { MetaBlogCrawler } from '../crawlers/metaBlogCrawler';
 import { TwitterBlogCrawler } from '../crawlers/twitterBlogCrawler';
 import { UberBlogCrawler } from '../crawlers/uberBlogCrawler';
+import { LinkedInBlogCrawler } from '../crawlers/linkedInBlogCrawler';
 
 @Module({
   imports: [DynamoDBModule, PostsModule],
@@ -22,6 +23,7 @@ import { UberBlogCrawler } from '../crawlers/uberBlogCrawler';
     MetaBlogCrawler,
     TwitterBlogCrawler,
     UberBlogCrawler,
+    LinkedInBlogCrawler,
     CronService,
   ],
 })

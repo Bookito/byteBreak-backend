@@ -6,6 +6,7 @@ import { MicrosoftBlogCrawler } from 'src/crawlers/microsoftBlogCrawler';
 import { MetaBlogCrawler } from '../crawlers/metaBlogCrawler';
 import { TwitterBlogCrawler } from '../crawlers/twitterBlogCrawler';
 import { UberBlogCrawler } from '../crawlers/uberBlogCrawler';
+import { LinkedInBlogCrawler } from '../crawlers/linkedInBlogCrawler';
 
 @Injectable()
 export class CronService {
@@ -16,6 +17,7 @@ export class CronService {
     private readonly metaBlogCrawler: MetaBlogCrawler,
     private readonly twitterBlogCrawler: TwitterBlogCrawler,
     private readonly uberBlogCrawler: UberBlogCrawler,
+    private readonly linkedInBlogCrawler: LinkedInBlogCrawler,
   ) {}
 
   @Cron('30 6 * * *') // Runs every day at 6:30 AM
@@ -28,6 +30,7 @@ export class CronService {
         this.metaBlogCrawler.crawl(),
         this.twitterBlogCrawler.crawl(),
         this.uberBlogCrawler.crawl(),
+        this.linkedInBlogCrawler.crawl(),
       ]);
       Logger.log('Cron Job: Crawled all blogs', 'CronService');
     } catch (err) {
