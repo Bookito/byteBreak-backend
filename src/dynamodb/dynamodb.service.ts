@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
-  DynamoDBClient,
   CreateTableCommand,
+  DynamoDBClient,
   PutItemCommand,
   ScanCommand,
   ScanCommandOutput,
@@ -24,7 +24,7 @@ export class DynamoDBService {
     });
 
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
       KeySchema: [
         { AttributeName: 'title', KeyType: 'HASH' },
         { AttributeName: 'link', KeyType: 'RANGE' },
@@ -71,7 +71,7 @@ export class DynamoDBService {
 
     const command = new CreateTableCommand(params);
     this.client
-      .send(new ScanCommand({ TableName: 'Posts' }))
+      .send(new ScanCommand({ TableName: process.env.TABLE_NAME }))
       .then(() => console.log('Table exists'))
       .catch(() => {
         this.client
@@ -83,21 +83,26 @@ export class DynamoDBService {
 
   async getAllPosts(): Promise<Post[]> {
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
     };
 
-    const command = new ScanCommand(params);
-    const result = await this.client.send(command);
+    try {
+      const command = new ScanCommand(params);
+      const result = await this.client.send(command);
 
-    return (result.Items || []).map((item) => unmarshall(item) as Post);
+      return (result.Items || []).map((item) => unmarshall(item) as Post);
+    } catch (error) {
+      console.error('Error in DynamoDBService.getAllPosts:', error);
+      return [];
+    }
   }
 
   async create(post: Post): Promise<Post> {
-    const id = uuidv4(); // generate a new unique ID
-    const item = { ...post, id }; // add the id to the item
+    const id = uuidv4();
+    const item = { ...post, id };
 
     const params = {
-      TableName: 'Posts',
+      TableName: process.env.TABLE_NAME,
       Item: marshall(item),
     };
 
@@ -109,8 +114,7 @@ export class DynamoDBService {
 
   async scanItems(tableName: string): Promise<ScanCommandOutput> {
     const command = new ScanCommand({ TableName: tableName });
-    const results = await this.client.send(command);
-    return results;
+    return await this.client.send(command);
   }
 
   async putItem(tableName: string, item: Post): Promise<void> {

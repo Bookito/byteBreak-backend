@@ -8,7 +8,7 @@ export class PostsService {
   constructor(private readonly dynamoDBService: DynamoDBService) {}
 
   async getAllPosts(): Promise<Post[]> {
-    const result = await this.dynamoDBService.scanItems('Posts');
+    const result = await this.dynamoDBService.scanItems(process.env.TABLE_NAME);
     return result.Items.map((item) => ({
       id: uuidv4(),
       title: item.title.S,
@@ -20,6 +20,6 @@ export class PostsService {
   }
 
   async create(post: Post): Promise<void> {
-    await this.dynamoDBService.putItem('Posts', post);
+    await this.dynamoDBService.putItem(process.env.TABLE_NAME, post);
   }
 }
