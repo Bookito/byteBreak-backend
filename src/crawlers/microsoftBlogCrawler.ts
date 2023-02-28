@@ -1,4 +1,4 @@
-import { MICROSOFT_BLOG } from 'src/constants/blogSources';
+import { MICROSOFT_DEVELOPER_BLOG } from 'src/constants/blogSources';
 import { Post } from 'src/posts/interfaces/post.interface';
 import { BaseBlogCrawler } from './baseBlogCrawler';
 import { Injectable, Logger } from '@nestjs/common';
@@ -7,7 +7,7 @@ import cheerio from 'cheerio';
 
 @Injectable()
 export class MicrosoftBlogCrawler extends BaseBlogCrawler {
-  protected readonly baseUrl = MICROSOFT_BLOG;
+  protected readonly baseUrl = MICROSOFT_DEVELOPER_BLOG;
   protected readonly blogName = 'Microsoft';
   protected readonly logger = new Logger(MicrosoftBlogCrawler.name);
 

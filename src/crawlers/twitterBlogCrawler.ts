@@ -3,11 +3,11 @@ import { Post } from '../posts/interfaces/post.interface';
 import { DynamoDBService } from '../dynamodb/dynamodb.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { BaseBlogCrawler } from './baseBlogCrawler';
-import { TWITTER_BLOG } from 'src/constants/blogSources';
+import { TWITTER_ENGINEERING_BLOG } from 'src/constants/blogSources';
 
 @Injectable()
 export class TwitterBlogCrawler extends BaseBlogCrawler {
-  protected readonly baseUrl = TWITTER_BLOG;
+  protected readonly baseUrl = TWITTER_ENGINEERING_BLOG;
   protected readonly blogName = 'Twitter';
   protected readonly logger = new Logger(TwitterBlogCrawler.name);
 

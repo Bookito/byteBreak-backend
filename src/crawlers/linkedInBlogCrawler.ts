@@ -3,11 +3,11 @@ import { BaseBlogCrawler } from './baseBlogCrawler';
 import { Injectable, Logger } from '@nestjs/common';
 import { DynamoDBService } from 'src/dynamodb/dynamodb.service';
 import cheerio from 'cheerio';
-import { LINKEDIN_BLOG } from 'src/constants/blogSources';
+import { LINKEDIN_ENGINEERING_BLOG } from 'src/constants/blogSources';
 
 @Injectable()
 export class LinkedInBlogCrawler extends BaseBlogCrawler {
-  protected readonly baseUrl = LINKEDIN_BLOG;
+  protected readonly baseUrl = LINKEDIN_ENGINEERING_BLOG;
   protected readonly blogName = 'LinkedIn Engineering';
   protected readonly logger = new Logger(LinkedInBlogCrawler.name);
 
