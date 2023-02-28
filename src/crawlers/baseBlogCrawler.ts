@@ -12,23 +12,40 @@ export abstract class BaseBlogCrawler {
   constructor(protected readonly dynamoDBService: DynamoDBService) {}
 
   async crawl(): Promise<void> {
-    const response = await axios.get(this.baseUrl);
-    const $ = cheerio.load(response.data);
-    const posts = this.getPostElements($);
+    try {
+      Logger.log(
+        `Cron Job: Started Crawling ${this.blogName} Blog`,
+        'CronService',
+      );
 
-    const newPosts: Post[] = [];
+      const response = await axios.get(this.baseUrl);
+      const $ = cheerio.load(response.data);
+      const posts = this.getPostElements($);
 
-    posts.each((i: number, element: cheerio.Element) => {
-      const post = this.extractPostData($, element);
-      newPosts.push(post);
-    });
+      const newPosts: Post[] = [];
 
-    const existingPosts = await this.dynamoDBService.getAllPosts();
-    const uniquePosts = this.getUniquePosts(existingPosts, newPosts);
+      posts.each((i: number, element: cheerio.Element) => {
+        const post = this.extractPostData($, element);
+        newPosts.push(post);
+      });
 
-    for (const post of uniquePosts) {
-      await this.dynamoDBService.create(post);
-      console.log(`Crawled and stored new post: ${post.title}`);
+      const existingPosts = await this.dynamoDBService.getAllPosts();
+      const uniquePosts = this.getUniquePosts(existingPosts, newPosts);
+
+      for (const post of uniquePosts) {
+        await this.dynamoDBService.create(post);
+        Logger.log(
+          `Crawled and stored new post from ${this.blogName}: ${post.title}`,
+        );
+      }
+
+      Logger.log(`Cron Job: Crawled ${this.blogName} Blog`, 'CronService');
+    } catch (error) {
+      Logger.error(
+        `Error occurred while crawling ${this.blogName} Blog: ${error.message}`,
+        error.stack,
+        'CronService',
+      );
     }
   }
 

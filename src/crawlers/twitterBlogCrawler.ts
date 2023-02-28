@@ -30,7 +30,7 @@ export class TwitterBlogCrawler extends BaseBlogCrawler {
           new Date().toISOString(),
       ),
       postOwner: this.formatString(
-        $(element).find('.result__byline span.blog__author-content a').text(),
+        $(element).find('.result__byline .blog__author-content a').text(),
       ),
       blogName: this.blogName,
     };
