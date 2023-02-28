@@ -34,7 +34,9 @@ export abstract class BaseBlogCrawler {
 
       for (const post of uniquePosts) {
         await this.dynamoDBService.create(post);
-        console.log(`Crawled and stored new post: ${post.title}`);
+        Logger.log(
+          `Crawled and stored new post from ${this.blogName}: ${post.title}`,
+        );
       }
 
       Logger.log(`Cron Job: Crawled ${this.blogName} Blog`, 'CronService');
