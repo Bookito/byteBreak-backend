@@ -21,12 +21,17 @@ export class GoogleBlogCrawler extends BaseBlogCrawler {
 
   protected extractPostData($: cheerio.Root, element: cheerio.Element): Post {
     return {
-      title: $(element).find('.dgc-card__title').text().trim(),
+      title: this.formatString(
+        $(element).find('.dgc-card__title').text().trim(),
+      ),
       link: $(element).find('.dgc-card__href').attr('href'),
       publishedDate: this.formatDateString(
-        $(element).find('.dgc-card__info > p').text().trim(),
+        $(element).find('.dgc-card__info > p').text().trim() ||
+          new Date().toISOString(),
       ),
-      postOwner: $(element).find('.dgc-card__description > p').text().trim(),
+      postOwner: this.formatString(
+        $(element).find('.dgc-card__description > p').text().trim(),
+      ),
       blogName: this.blogName,
     };
   }

@@ -45,6 +45,13 @@ export abstract class BaseBlogCrawler {
     return newPosts.filter((post) => !existingLinks.includes(post.link));
   }
 
+  protected formatString(postOwner: string): string {
+    return postOwner
+      .replace(/[\n\s]+/g, ' ')
+      .trim()
+      .replace(/\s+/g, ' ');
+  }
+
   protected formatDateString(dateString: string): string {
     const date = new Date(dateString);
     return date.toISOString();

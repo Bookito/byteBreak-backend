@@ -21,12 +21,15 @@ export class MicrosoftBlogCrawler extends BaseBlogCrawler {
 
   protected extractPostData($: cheerio.Root, element: cheerio.Element): Post {
     return {
-      title: $(element).find('h2.entry-title > a').text(),
+      title: this.formatString($(element).find('h2.entry-title > a').text()),
       link: $(element).find('h2.entry-title > a').attr('href'),
       publishedDate: this.formatDateString(
-        $(element).find('div.landing-postdate > span.entry-post-date').text(),
+        $(element).find('div.landing-postdate > span.entry-post-date').text() ||
+          new Date().toISOString(),
       ),
-      postOwner: $(element).find('span.entry-author-link > a').text(),
+      postOwner: this.formatString(
+        $(element).find('span.entry-author-link > a').text(),
+      ),
       blogName: this.blogName,
     };
   }

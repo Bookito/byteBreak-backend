@@ -1,7 +1,7 @@
 export const GOOGLE_BLOG = 'https://developers.googleblog.com/';
 export const AWS_BLOG = 'https://aws.amazon.com/blogs/aws/';
 export const MICROSOFT_BLOG = 'https://devblogs.microsoft.com/';
-export const FACEBOOK_BLOG = 'https://engineering.fb.com/';
+export const META_BLOG = 'https://engineering.fb.com/';
 export const INSTAGRAM_BLOG = 'https://instagram-engineering.com/';
 export const LINKEDIN_BLOG = 'https://engineering.linkedin.com/blog';
 export const NETFLIX_BLOG = 'https://netflixtechblog.com/';
