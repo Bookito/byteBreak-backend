@@ -1,4 +1,4 @@
-import { AWS_BLOG } from 'src/constants/blogSources';
+import { MICROSOFT_BLOG } from 'src/constants/blogSources';
 import { Post } from 'src/posts/interfaces/post.interface';
 import { BaseBlogCrawler } from './baseBlogCrawler';
 import { Injectable, Logger } from '@nestjs/common';
@@ -6,27 +6,27 @@ import { DynamoDBService } from 'src/dynamodb/dynamodb.service';
 import cheerio from 'cheerio';
 
 @Injectable()
-export class AwsBlogCrawler extends BaseBlogCrawler {
-  protected readonly baseUrl = AWS_BLOG;
-  protected readonly blogName = 'AWS';
-  protected readonly logger = new Logger(AwsBlogCrawler.name);
+export class MicrosoftBlogCrawler extends BaseBlogCrawler {
+  protected readonly baseUrl = MICROSOFT_BLOG;
+  protected readonly blogName = 'Microsoft';
+  protected readonly logger = new Logger(MicrosoftBlogCrawler.name);
 
   constructor(protected readonly dynamoDBService: DynamoDBService) {
     super(dynamoDBService);
   }
 
   protected getPostElements($: cheerio.Root): cheerio.Cheerio {
-    return $('article.blog-post');
+    return $('article.search-main');
   }
 
   protected extractPostData($: cheerio.Root, element: cheerio.Element): Post {
     return {
-      title: $(element).find('h2.blog-post-title > a > span').text(),
-      link: $(element).find('h2.blog-post-title > a').attr('href'),
+      title: $(element).find('h2.entry-title > a').text(),
+      link: $(element).find('h2.entry-title > a').attr('href'),
       publishedDate: this.formatDateString(
-        $(element).find('footer.blog-post-meta > time').attr('datetime'),
+        $(element).find('div.landing-postdate > span.entry-post-date').text(),
       ),
-      postOwner: $(element).find('footer.blog-post-meta > span > a').text(),
+      postOwner: $(element).find('span.entry-author-link > a').text(),
       blogName: this.blogName,
     };
   }

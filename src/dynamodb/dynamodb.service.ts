@@ -86,10 +86,15 @@ export class DynamoDBService {
       TableName: process.env.TABLE_NAME,
     };
 
-    const command = new ScanCommand(params);
-    const result = await this.client.send(command);
+    try {
+      const command = new ScanCommand(params);
+      const result = await this.client.send(command);
 
-    return (result.Items || []).map((item) => unmarshall(item) as Post);
+      return (result.Items || []).map((item) => unmarshall(item) as Post);
+    } catch (error) {
+      console.error('Error in DynamoDBService.getAllPosts:', error);
+      return [];
+    }
   }
 
   async create(post: Post): Promise<Post> {
