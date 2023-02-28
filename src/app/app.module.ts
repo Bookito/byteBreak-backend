@@ -9,6 +9,7 @@ import { DynamoDBModule } from 'src/dynamodb/dynamodb.module';
 import { MicrosoftBlogCrawler } from '../crawlers/microsoftBlogCrawler';
 import { MetaBlogCrawler } from '../crawlers/metaBlogCrawler';
 import { TwitterBlogCrawler } from '../crawlers/twitterBlogCrawler';
+import { UberBlogCrawler } from '../crawlers/uberBlogCrawler';
 
 @Module({
   imports: [DynamoDBModule, PostsModule],
@@ -20,6 +21,7 @@ import { TwitterBlogCrawler } from '../crawlers/twitterBlogCrawler';
     MicrosoftBlogCrawler,
     MetaBlogCrawler,
     TwitterBlogCrawler,
+    UberBlogCrawler,
     CronService,
   ],
 })
