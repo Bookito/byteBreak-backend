@@ -1,4 +1,4 @@
-import { META_BLOG } from 'src/constants/blogSources';
+import { META_ENGINEERING_BLOG } from 'src/constants/blogSources';
 import { Post } from 'src/posts/interfaces/post.interface';
 import { BaseBlogCrawler } from './baseBlogCrawler';
 import { Injectable, Logger } from '@nestjs/common';
@@ -7,7 +7,7 @@ import cheerio from 'cheerio';
 
 @Injectable()
 export class MetaBlogCrawler extends BaseBlogCrawler {
-  protected readonly baseUrl = META_BLOG;
+  protected readonly baseUrl = META_ENGINEERING_BLOG;
   protected readonly blogName = 'Meta';
   protected readonly logger = new Logger(MetaBlogCrawler.name);
 
