@@ -69,6 +69,7 @@ export class UberBlogCrawler extends BaseBlogCrawler {
       publishedDate: this.formatDateString(publishedDate),
       postOwner: this.formatString(postOwner),
       blogName: this.blogName,
+      thumbnail: $(element).find('img')?.attr('src') || '',
     };
   }
 }

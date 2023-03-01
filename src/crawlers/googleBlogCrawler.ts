@@ -33,6 +33,7 @@ export class GoogleBlogCrawler extends BaseBlogCrawler {
         $(element).find('.dgc-card__description > p').text().trim(),
       ),
       blogName: this.blogName,
+      thumbnail: $(element).find('.dgc-card__image')?.attr('src') || '',
     };
   }
 }

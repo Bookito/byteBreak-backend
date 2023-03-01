@@ -33,6 +33,8 @@ export class AwsBlogCrawler extends BaseBlogCrawler {
         $(element).find('footer.blog-post-meta > span > a').text(),
       ),
       blogName: this.blogName,
+      thumbnail:
+        $(element).find('meta[property="image"]').attr('content') || '',
     };
   }
 }
