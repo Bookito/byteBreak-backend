@@ -16,7 +16,9 @@ export class UberBlogCrawler extends BaseBlogCrawler {
   }
 
   protected getPostElements($: cheerio.Root): cheerio.Cheerio {
-    return $('div._FeedCard_feed-meta_3NV, div._FeedHero_feed-hero__right_UOo');
+    return $(
+      'div._FeedCard_feed-meta_3NV, div._FeedHero_feed-hero__right_UOo, div._FeedCard_feed-card_3_M',
+    );
   }
 
   protected extractPostData($: cheerio.Root, element: cheerio.Element): Post {
@@ -69,7 +71,7 @@ export class UberBlogCrawler extends BaseBlogCrawler {
       publishedDate: this.formatDateString(publishedDate),
       postOwner: this.formatString(postOwner),
       blogName: this.blogName,
-      thumbnail: $(element).find('img')?.attr('src') || '',
+      thumbnail: $(element).find('picture > img')?.attr('src') || '',
     };
   }
 }
