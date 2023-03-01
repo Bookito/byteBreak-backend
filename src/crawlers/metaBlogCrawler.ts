@@ -31,6 +31,7 @@ export class MetaBlogCrawler extends BaseBlogCrawler {
       ),
       postOwner: this.formatString(this.blogName),
       blogName: this.blogName,
+      thumbnail: $(element).find('.feat-image > img')?.attr('src') || '',
     };
   }
 }

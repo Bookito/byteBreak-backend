@@ -4,4 +4,5 @@ export interface Post {
   blogName: string;
   publishedDate: string;
   postOwner: string;
+  thumbnail?: string;
 }

@@ -32,6 +32,8 @@ export class LinkedInBlogCrawler extends BaseBlogCrawler {
       ),
       postOwner: this.formatString($(element).find('span.author > a').text()),
       blogName: this.blogName,
+      thumbnail:
+        $(element).find('img.lazy-load-src')?.attr('data-background-src') || '',
     };
   }
 }
