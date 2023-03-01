@@ -8,14 +8,21 @@ dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.get(CronService).handleCron();
 
   // Enable CORS for all routes
   app.enableCors();
 
+  // app.enableCors({
+  //   origin: 'http://localhost:3000', // Put where byte-break RN app is running on
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  //   credentials: true,
+  // });
+
+  // Start crawling bot
+  await app.get(CronService).handleCron();
+
   const logger = new Logger('bootstrap');
 
-  // Start the app on the specified port (or 3000 if not specified)
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
