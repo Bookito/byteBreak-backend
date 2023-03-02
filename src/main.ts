@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { CronService } from 'src/cron/cron.service';
-import { AppModule } from 'app.module';
+import { AppModule } from 'src/app.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const logger = new Logger('bootstrap');
 
-  const port = process.env.PORT || 3000;
+  const port = 8080;
   await app.listen(port);
 
   logger.log(`Application listening on port ${port}`);
