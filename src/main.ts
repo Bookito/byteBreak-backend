@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const logger = new Logger('bootstrap');
 
-  const port = 8080;
+  const port = process.env.PORT || 3000;
   await app.listen(port);
 
   logger.log(`Application listening on port ${port}`);
