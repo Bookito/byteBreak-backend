@@ -18,7 +18,7 @@ async function bootstrap() {
   // });
 
   // Start crawling bot
-  await app.get(CronService).handleCron();
+  // await app.get(CronService).handleCron();
 
   const logger = new Logger('bootstrap');
 
