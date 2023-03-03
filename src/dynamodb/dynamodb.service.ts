@@ -98,23 +98,7 @@ export class DynamoDBService {
   }
 
   async create(post: Post): Promise<Post> {
-    const params = {
-      TableName: process.env.TABLE_NAME,
-      FilterExpression: 'link = :link',
-      ExpressionAttributeValues: {
-        ':link': { S: post.link },
-      },
-    };
-
     try {
-      const command = new ScanCommand(params);
-      const result = await this.client.send(command);
-
-      if (result.Items && result.Items.length > 0) {
-        console.log(`Post with link "${post.link}" already exists in database`);
-        return unmarshall(result.Items[0]) as Post;
-      }
-
       const id = uuidv4();
       const item = { ...post, id };
 

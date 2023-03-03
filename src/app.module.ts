@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { PostsModule } from 'src/posts/posts.module';
 import { AwsBlogCrawler } from './crawlers/awsBlogCrawler'; // Import the AwsBlogCrawler
 import { GoogleBlogCrawler } from './crawlers/googleBlogCrawler';
@@ -11,7 +11,13 @@ import { UberBlogCrawler } from './crawlers/uberBlogCrawler';
 import { LinkedInBlogCrawler } from './crawlers/linkedInBlogCrawler';
 
 @Module({
-  imports: [DynamoDBModule, PostsModule],
+  imports: [
+    DynamoDBModule,
+    PostsModule,
+    CacheModule.register({
+      ttl: 86400,
+    }),
+  ],
   controllers: [],
   providers: [
     AwsBlogCrawler,
