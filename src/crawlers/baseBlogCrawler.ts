@@ -70,7 +70,12 @@ export abstract class BaseBlogCrawler {
   }
 
   protected formatDateString(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString();
+    try {
+      const date = new Date(dateString);
+      return date.toISOString();
+    } catch (e) {
+      const date = new Date();
+      return date.toISOString();
+    }
   }
 }
