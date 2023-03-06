@@ -16,7 +16,7 @@ export class PostsService {
       publishedDate: item.publishedDate.S,
       postOwner: item.postOwner.S,
       blogName: item.blogName.S,
-      thumbnail: item.thumbnail.S,
+      thumbnail: item.thumbnail?.S,
     }));
   }
 
