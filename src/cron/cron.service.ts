@@ -24,7 +24,6 @@ export class CronService {
   async handleGoogleBlogCron() {
     try {
       await this.googleBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled Google Blog', 'CronService');
     } catch (err) {
       Logger.error(`Cron Job Google Error: ${err.message}`, '', 'CronService');
     }
@@ -34,7 +33,6 @@ export class CronService {
   async handleAwsBlogCron() {
     try {
       await this.awsBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled AWS Blog', 'CronService');
     } catch (err) {
       Logger.error(`Cron Job AWS Error: ${err.message}`, '', 'CronService');
     }
@@ -44,7 +42,6 @@ export class CronService {
   async handleMicrosoftBlogCron() {
     try {
       await this.microsoftBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled Microsoft Blog', 'CronService');
     } catch (err) {
       Logger.error(
         `Cron Job Microsoft Error: ${err.message}`,
@@ -58,7 +55,6 @@ export class CronService {
   async handleMetaBlogCron() {
     try {
       await this.metaBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled Meta Blog', 'CronService');
     } catch (err) {
       Logger.error(`Cron Job Meta Error: ${err.message}`, '', 'CronService');
     }
@@ -68,7 +64,6 @@ export class CronService {
   async handleTwitterBlogCron() {
     try {
       await this.twitterBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled Twitter Blog', 'CronService');
     } catch (err) {
       Logger.error(`Cron Job Twitter Error: ${err.message}`, '', 'CronService');
     }
@@ -78,7 +73,6 @@ export class CronService {
   async handleUberBlogCron() {
     try {
       await this.uberBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled Uber blog', 'CronService');
     } catch (err) {
       Logger.error(`Cron Job Uber Error: ${err.message}`, '', 'CronService');
     }
@@ -88,7 +82,6 @@ export class CronService {
   async handleLinkedInBlogCron() {
     try {
       await this.linkedInBlogCrawler.crawl();
-      Logger.log('Cron Job: Crawled LinkedIn blog', 'CronService');
     } catch (err) {
       Logger.error(
         `Cron Job LinkedIn Error: ${err.message}`,
