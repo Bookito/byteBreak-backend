@@ -1,4 +1,4 @@
-export const GOOGLE_DEVELOPERS_BLOG = 'https://developers.googleblog.com/';
+export const GOOGLE_DEVELOPERS_BLOG = 'https://developers.googleblog.com';
 export const AWS_BLOG = 'https://aws.amazon.com/blogs/aws/';
 export const MICROSOFT_DEVELOPER_BLOG = 'https://devblogs.microsoft.com/';
 export const META_ENGINEERING_BLOG = 'https://engineering.fb.com/';

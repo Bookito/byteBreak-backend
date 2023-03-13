@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
-import { CronService } from 'src/cron/cron.service';
 import { AppModule } from 'src/app.module';
+import { CronService } from 'src/cron/cron.service';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,7 +18,14 @@ async function bootstrap() {
   // });
 
   // Start crawling bot
-  await app.get(CronService).handleCron();
+  const cronService = app.get(CronService);
+  await cronService.handleGoogleBlogCron();
+  await cronService.handleAwsBlogCron();
+  await cronService.handleMicrosoftBlogCron();
+  await cronService.handleMetaBlogCron();
+  await cronService.handleTwitterBlogCron();
+  await cronService.handleUberBlogCron();
+  await cronService.handleLinkedInBlogCron();
 
   const logger = new Logger('bootstrap');
 
