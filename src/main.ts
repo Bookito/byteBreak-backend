@@ -11,11 +11,6 @@ async function bootstrap() {
 
   // Enable CORS for all routes
   app.enableCors();
-  // app.enableCors({
-  //   origin: 'http://localhost:3000', // Put where byte-break RN app is running on
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  //   credentials: true,
-  // });
 
   // Start crawling bot
   const cronService = app.get(CronService);
